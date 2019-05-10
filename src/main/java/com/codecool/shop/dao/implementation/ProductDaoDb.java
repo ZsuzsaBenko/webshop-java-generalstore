@@ -74,23 +74,27 @@ public class ProductDaoDb implements ProductDao {
         }
     }
 
+    private PreparedStatement createFindStatement(Connection connection, String sql, int id) throws SQLException {
+        PreparedStatement preparedStatement = connection.prepareStatement(sql);
+        preparedStatement.setInt(1, id);
+        return preparedStatement;
+    }
+
     @Override
     public Product find(int id) {
         String sql = "SELECT * FROM product WHERE id=?;";
         Product product = null;
-        try (Connection connection = DriverManager.getConnection(DATABASE, DBUSER, DBPASSWORD)) {
-            PreparedStatement statement = connection.prepareStatement(sql);
-            statement.setInt(1, id);
-            ResultSet rs = statement.executeQuery();
+        try (Connection connection = DriverManager.getConnection(DATABASE, DBUSER, DBPASSWORD);
+             PreparedStatement statement = createFindStatement(connection, sql, id);
+             ResultSet rs = statement.executeQuery()) {
             if (rs.next()) {
-                product = new Product(
-                        rs.getInt("id"),
-                        rs.getString("name"),
-                        rs.getFloat("default_price"),
-                        rs.getString("currency"),
-                        rs.getString("description"),
-                        ProductCategoryDaoDb.getInstance().find(rs.getInt("product_category")),
-                        SupplierDaoDb.getInstance().find(rs.getInt("supplier")));
+                product = new Product(rs.getInt("id"),
+                                      rs.getString("name"),
+                                      rs.getFloat("default_price"),
+                                      rs.getString("currency"),
+                                      rs.getString("description"),
+                                      ProductCategoryDaoDb.getInstance().find(rs.getInt("product_category")),
+                                      SupplierDaoDb.getInstance().find(rs.getInt("supplier")));
             }
         } catch (SQLException e) {
             e.printStackTrace();
