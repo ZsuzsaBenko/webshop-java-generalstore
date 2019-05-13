@@ -1,5 +1,6 @@
 package com.codecool.shop.controller;
 
+//import ch.qos.logback.classic.Level;
 import com.codecool.shop.dao.ProductCategoryDao;
 import com.codecool.shop.dao.ProductDao;
 import com.codecool.shop.dao.SupplierDao;
@@ -22,8 +23,12 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 @WebServlet(urlPatterns = {"/"})
 public class ProductController extends HttpServlet {
+    private static final Logger LOGGER = LoggerFactory.getLogger(ProductController.class);
     private ProductDao productDataStore = ProductDaoDb.getInstance();
     private ProductCategoryDao productCategoryDataStore = ProductCategoryDaoDb.getInstance();
     private final ProductCategory defaultCategory = productCategoryDataStore.find(1);
@@ -53,6 +58,7 @@ public class ProductController extends HttpServlet {
             if (url == null) {
                 url = "/";
             }
+            LOGGER.warn("User will be redirected to {}.", url);
             response.sendRedirect(url);
         } else {
             parameters.forEach(((key, value) -> context.setVariable(String.valueOf(key), value)));
@@ -65,13 +71,21 @@ public class ProductController extends HttpServlet {
         Order order = (Order) session.getAttribute("order");
 
         if (order == null) {
+            LOGGER.info("User created new order.");
             order = new Order();
         } else {
             order = (Order) session.getAttribute("order");
         }
 
+
         if (addId != null) {
-            order.getShoppingCart().addProduct(Integer.parseInt(addId));
+            if (Integer.parseInt(addId) < 1 || Integer.parseInt(addId) > getProductNumber()) {
+                LOGGER.error("Invalid id: {}!", addId);
+            } else {
+                order.getShoppingCart().addProduct(Integer.parseInt(addId));
+                LOGGER.info("User added item to shopping cart. Number of items in shopping card is {}.",
+                        order.getShoppingCart().getCart().size());
+            }
         }
 
         session.setAttribute("order", order);
@@ -80,17 +94,23 @@ public class ProductController extends HttpServlet {
     private List<Product> selectProducts(String categoryName, String supplierName, HttpSession session) {
         List<Product> products;
 
+        //setLoggingLevel(Level.DEBUG);
+
         ProductCategory category = productCategoryDataStore.find(categoryName);
         Supplier supplier = supplierDao.find(supplierName);
 
         if (category == null && supplier == null) {
             products = productDataStore.getBy(defaultCategory);
+            LOGGER.debug("Results filtered by default category: {}", defaultCategory.getName());
         } else if (category == null) {
             products = productDataStore.getBy(supplier);
+            LOGGER.debug("Results filtered by supplier: {}", supplier.getName());
         } else if (supplier == null) {
             products = productDataStore.getBy(category);
+            LOGGER.debug("Results filtered by category: {}", category.getName());
         } else {
             products = productDataStore.getProducts(categoryName, supplierName);
+            LOGGER.debug("Results filtered by category: {} and supplier: {}", category.getName(), supplier.getName());
         }
         if (categoryName != null || supplierName != null) {
             session.setAttribute("url", (String.format("/?category=%s&supplier=%s", categoryName, supplierName)));
@@ -128,4 +148,13 @@ public class ProductController extends HttpServlet {
 
         return parameters;
     }
+
+    private int getProductNumber() {
+        return productDataStore.getAll().size();
+    }
+
+    /*private static void setLoggingLevel(ch.qos.logback.classic.Level level) {
+        ch.qos.logback.classic.Logger root = (ch.qos.logback.classic.Logger) org.slf4j.LoggerFactory.getLogger(ch.qos.logback.classic.Logger.ROOT_LOGGER_NAME);
+        root.setLevel(level);
+    }*/
 }
