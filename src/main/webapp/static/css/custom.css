@@ -232,7 +232,7 @@ span {
 /* checkout */
 
 #form-container {
-    width: 80%;
+    width: 78%;
     margin: 0 auto;
     background-color: rgba(255, 255, 255, 0.65);
     padding-top: 30px;
@@ -300,13 +300,14 @@ span {
 
 #payment-container {
     width: 60%;
-    margin: 30px auto;
+    margin: 50px auto 30px;
     background-color: rgba(255, 255, 255, 0.65);
 }
 
 .payment-image {
     display: block;
     margin: 20px auto;
+    height: 80%;
 }
 
 /* confirmation */
@@ -319,7 +320,7 @@ span {
 #confirmation-message {
     padding: 15px;
     background-color: rgba(255, 255, 255, 0.65);
-    width: 80%;
-    margin: 30px auto;
+    width: 78%;
+    margin: 50px auto 30px;
     text-align: center;
 }
