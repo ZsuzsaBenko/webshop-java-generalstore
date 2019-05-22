@@ -28,7 +28,7 @@ create table product
     product_category integer not null references product_category(id)
 );
 
-create table user
+create table users
 (
     id serial not null primary key,
     name varchar not null,
