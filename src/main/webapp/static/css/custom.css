@@ -110,6 +110,36 @@ h1 {
     color: lavender;
 }
 
+/* registration / login modals */
+#register-modal .modal-content, #login-modal .modal-content {
+    background-color: lavender;
+    font-family: 'Chelsea Market', cursive;
+    font-size: 18px;
+    color: black;
+    padding: 20px;
+}
+.modal-header {
+    border-bottom: 1px solid darkslateblue;
+}
+
+#register-title, #login-title {
+    font-weight: bold;
+}
+
+
+#register-modal label, #register-modal input, #login-modal label, #login-modal input {
+    display: block;
+}
+
+#register-modal label, #login-modal label {
+    margin-top: 15px;
+}
+
+#register-modal input, #login-modal input {
+    width: 70%;
+    padding: 2px;
+}
+
 
 /* home */
 
