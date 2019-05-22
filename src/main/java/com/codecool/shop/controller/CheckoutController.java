@@ -24,6 +24,10 @@ public class CheckoutController extends HttpServlet {
         TemplateEngine engine = TemplateEngineUtil.getTemplateEngine(request.getServletContext());
         WebContext context = new WebContext(request, response, request.getServletContext());
 
+        String email = (String) request.getSession().getAttribute("email");
+        if (email != null) {
+            context.setVariable("status", "logged-in");
+        }
         engine.process("order/checkout", context, response.getWriter());
     }
 

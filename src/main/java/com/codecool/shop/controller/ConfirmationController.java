@@ -32,6 +32,11 @@ public class ConfirmationController extends HttpServlet {
 
         request.getSession().removeAttribute("order");
 
+        String email = (String) request.getSession().getAttribute("email");
+        if (email != null) {
+            context.setVariable("status", "logged-in");
+        }
+
         engine.process("order/confirmation", context, response.getWriter());
     }
 

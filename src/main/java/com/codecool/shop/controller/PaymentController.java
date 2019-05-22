@@ -23,6 +23,10 @@ public class PaymentController extends HttpServlet {
         TemplateEngine engine = TemplateEngineUtil.getTemplateEngine(request.getServletContext());
         WebContext context = new WebContext(request, response, request.getServletContext());
 
+        String email = (String) request.getSession().getAttribute("email");
+        if (email != null) {
+            context.setVariable("status", "logged-in");
+        }
         context.setVariable("paymentOptions", PAYMENT_OPTIONS);
         engine.process("order/payment", context, response.getWriter());
     }
