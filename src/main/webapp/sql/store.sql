@@ -3,7 +3,6 @@ drop table if exists product_category;
 drop table if exists supplier;
 drop table if exists users;
 
-
 create table supplier
 (
     id serial not null primary key,
