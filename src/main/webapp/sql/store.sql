@@ -33,5 +33,11 @@ create table users
     id serial not null primary key,
     name varchar not null,
     email varchar not null,
-    password varchar not null
+    password varchar not null,
+    telephone varchar,
+    country varchar,
+    zipcode varchar,
+    city varchar,
+    street varchar,
+    number varchar
 );
