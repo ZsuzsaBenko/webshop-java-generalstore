@@ -18,7 +18,8 @@
                         <p class="lead" th:text="${prod.getPrice()}">100 USD</p>
                     </div>
                     <div class="card-text">
-                        <a class="btn custom-product-button" th:name="prod_id" th:href="@{/add(item_id=${prod.getId()})}">Add to
+                        <!--/*@thymesVar id="status" type="java.lang.String"*/-->
+                        <a th:if="${status == 'logged-in'}" class="btn custom-product-button" th:name="prod_id" th:href="@{/add(item_id=${prod.getId()})}">Add to
                             cart</a>
                     </div>
                 </div>

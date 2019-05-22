@@ -63,12 +63,13 @@ h1 {
     margin-top: 3rem;
 }
 #navbar {
-    width: 100%;
+    width: 78%;
     height: 50px;
     background-color: darkslateblue;
     color: white;
     position: fixed;
     top: 0;
+    left: 11%;
     z-index: 100;
 }
 

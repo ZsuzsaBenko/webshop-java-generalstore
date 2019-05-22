@@ -4,9 +4,10 @@
 <nav>
     <div th:fragment="nav" id="navbar">
        <ul>
-           <li><button type="button" id="register-button" data-toggle="modal" data-target="#register-modal">Register</button></li>
-           <li><button type="button" id="login-button" data-toggle="modal" data-target="#login-modal">Login</button></li>
-           <li><a href="/logout">Logout</a></li>
+           <!--/*@thymesVar id="status" type="java.lang.String"*/-->
+           <li th:unless="${status == 'logged-in'}"><button type="button" id="register-button" data-toggle="modal" data-target="#register-modal">Register</button></li>
+           <li th:unless="${status == 'logged-in'}"><button type="button" id="login-button" data-toggle="modal" data-target="#login-modal">Login</button></li>
+           <li th:if="${status == 'logged-in'}"><a href="/logout">Logout</a></li>
            <li><a href="/">Home</a></li>
        </ul>
     </div>

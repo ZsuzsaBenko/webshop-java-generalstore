@@ -41,7 +41,8 @@
         </div>
         <div class="">
             <div th:replace="product/search.html :: search"></div>
-            <a class="btn custom-button cart" href="/cart">
+            <!--/*@thymesVar id="status" type="java.lang.String"*/-->
+            <a th:if="${status == 'logged-in'}" class="btn custom-button cart" href="/cart">
                 <i class="fas fa-shopping-cart"></i> To cart
             </a>
         </div>

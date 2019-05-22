@@ -44,6 +44,10 @@ public class ProductController extends HttpServlet {
         List<Product> products = selectProducts(categoryName, supplierName, session);
         Map<String, Object> parameters = getServletParameters(categoryName, supplierName, products);
 
+        if (session.getAttribute("email") != null) {
+            parameters.put("status", "logged-in");
+        }
+
         String addId = request.getParameter("item_id");
 
         if (addId != null) {
