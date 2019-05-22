@@ -39,16 +39,15 @@
         <div class="jumbotron text-center">
             <h1>General Shop</h1>
         </div>
-        <div class="d-flex flex-row-reverse">
+        <div class="">
+            <div th:replace="product/search.html :: search"></div>
             <a class="btn custom-button cart" href="/cart">
                 <i class="fas fa-shopping-cart"></i> To cart
             </a>
-
-            <div th:replace="product/search.html :: search"></div>
         </div>
 
         <div id="main-content">
-            <div class="card" id="current-categ">
+            <div class="" id="current-categ">
                 <!--/*@thymesVar id="categ" type="com.codecool.shop.model.ProductCategory"*/-->
                 <!--/*@thymesVar id="filter" type="java.lang.String"*/-->
                 <div id="current-categ-name" th:text="${filter}"></div>
