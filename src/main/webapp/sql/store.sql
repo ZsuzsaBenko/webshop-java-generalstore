@@ -1,6 +1,7 @@
 drop table if exists product;
 drop table if exists product_category;
 drop table if exists supplier;
+drop table if exists users;
 
 create table supplier
 (
