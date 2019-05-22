@@ -27,3 +27,12 @@ create table product
     supplier integer references supplier(id),
     product_category integer not null references product_category(id)
 );
+
+create table user
+(
+    id serial not null primary key,
+    name varchar not null,
+    email varchar not null,
+    password varchar not null;
+
+);
