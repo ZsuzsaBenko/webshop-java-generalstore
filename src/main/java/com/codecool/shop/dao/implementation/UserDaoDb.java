@@ -32,6 +32,7 @@ public class UserDaoDb implements UserDao {
             statement.setString(1, user.getName());
             statement.setString(2, user.getEmail());
             statement.setString(3, user.getPassword());
+            statement.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
             throw new RuntimeException("Database not found", e);
@@ -39,49 +40,12 @@ public class UserDaoDb implements UserDao {
     }
 
     @Override
-    public void updateNameAndEmail(int id) {
-        User user = find(id);
-        String sql = "UPDATE users SET name=?, email=? WHERE id=?";
-        try (Connection connection = DriverManager.getConnection(DATABASE, DBUSER, DBPASSWORD)) {
-            PreparedStatement statement = connection.prepareStatement(sql);
-            statement.setString(1, user.getName());
-            statement.setString(2, user.getEmail());
-            statement.setInt(3, id);
-        } catch (SQLException e) {
-            e.printStackTrace();
-            throw new RuntimeException("Database not found", e);
-        }
-
-    }
-
-    @Override
-    public void updateOrderData(int id) {
-        User user = find(id);
-        String sql = "UPDATE users SET telephone=?, country=?, zipcode=?, city=?, street=? , number=?" +
-                "WHERE id=?";
-        try (Connection connection = DriverManager.getConnection(DATABASE, DBUSER, DBPASSWORD)) {
-            PreparedStatement statement = connection.prepareStatement(sql);
-            statement.setString(1, user.getPhoneNumber());
-            statement.setString(2, user.getBillingAddress().get("country"));
-            statement.setString(3, user.getBillingAddress().get("zipcode"));
-            statement.setString(4, user.getBillingAddress().get("city"));
-            statement.setString(5, user.getBillingAddress().get("street"));
-            statement.setString(6, user.getBillingAddress().get("number"));
-            statement.setInt(7, id);
-        } catch (SQLException e) {
-            e.printStackTrace();
-            throw new RuntimeException("Database not found", e);
-        }
-
-    }
-
-    @Override
-    public User find(int id) {
-        String sql = "SELECT * FROM users WHERE id=?;";
+    public User find(String email) {
+        String sql = "SELECT * FROM users WHERE email=?;";
         User user = null;
         try (Connection connection = DriverManager.getConnection(DATABASE, DBUSER, DBPASSWORD)) {
             PreparedStatement statement = connection.prepareStatement(sql);
-            statement.setInt(1, id);
+            statement.setString(1, email);
             ResultSet rs = statement.executeQuery();
             Map<String, String> billingAddress = new HashMap<>();
             if (rs.next()) {
@@ -102,5 +66,27 @@ public class UserDaoDb implements UserDao {
             throw new RuntimeException("Database not found", e);
         }
         return user;
+    }
+
+    @Override
+    public void updateUserData(String email) {
+        User user = find(email);
+        String sql = "UPDATE users SET name=?, telephone=?, country=?, zipcode=?, city=?, street=? , number=?" +
+                "WHERE email=?";
+        try (Connection connection = DriverManager.getConnection(DATABASE, DBUSER, DBPASSWORD)) {
+            PreparedStatement statement = connection.prepareStatement(sql);
+            statement.setString(1, user.getName());
+            statement.setString(2, user.getPhoneNumber());
+            statement.setString(3, user.getBillingAddress().get("country"));
+            statement.setString(4, user.getBillingAddress().get("zipcode"));
+            statement.setString(5, user.getBillingAddress().get("city"));
+            statement.setString(6, user.getBillingAddress().get("street"));
+            statement.setString(7, user.getBillingAddress().get("number"));
+            statement.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+            throw new RuntimeException("Database not found", e);
+        }
+
     }
 }
