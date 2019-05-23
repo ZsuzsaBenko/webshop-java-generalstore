@@ -33,7 +33,7 @@ public class CartController extends HttpServlet {
 
         String url = (String) request.getSession().getAttribute("url");
 
-        ControllerUtil.setUserParameters(request, context);
+        ControllerUtil.setNavbarParameters(request, context);
         context.setVariable("cartMap", cart != null ? cartContent : new LinkedHashMap<>());
         context.setVariable("cartValue", cart != null ? String.format("%s Talentum", cart.getTotalPrice()) : "");
         context.setVariable("previousURL", url == null ? "/" : url);

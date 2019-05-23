@@ -109,8 +109,8 @@ public class ProductController extends HttpServlet {
         return products;
     }
 
-    private HashMap<String, Object> getServletParameters(String categoryName, String supplierName, List<Product> products) {
-        HashMap<String, Object> parameters = new HashMap<>();
+    private Map<String, Object> getServletParameters(String categoryName, String supplierName, List<Product> products) {
+        Map<String, Object> parameters = new HashMap<>();
 
         ProductCategory category = productCategoryDataStore.find(categoryName);
         Supplier supplier = supplierDao.find(supplierName);

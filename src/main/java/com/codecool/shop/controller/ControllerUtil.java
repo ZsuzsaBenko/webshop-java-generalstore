@@ -9,7 +9,7 @@ import javax.servlet.http.HttpServletRequest;
 public class ControllerUtil {
     private static UserDao userDao = UserDaoDb.getInstance();
 
-    public static void setUserParameters(HttpServletRequest request, WebContext context) {
+    public static void setNavbarParameters(HttpServletRequest request, WebContext context) {
         String email = (String) request.getSession().getAttribute("email");
         if (email != null) {
             context.setVariable("status", "logged-in");

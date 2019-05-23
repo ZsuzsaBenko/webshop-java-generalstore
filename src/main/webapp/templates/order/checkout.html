@@ -45,35 +45,36 @@
     </div>
     <div id="form-container">
         <form action="/checkout" method="POST">
+            <!--/*@thymesVar id="user" type="java.util.Map<String, String>"*/-->
             <label for="name">Name:</label>
-            <input type="text" id="name" name="name" required>
+            <input type="text" id="name" name="name" th:value="${name}" required>
             <label for="email">E-mail address:</label>
-            <input type="email" id="email" name="email" required>
+            <input type="email" id="email" name="email" th:value="${user.get('email')}" disabled>
             <label for="phone">Telephone number:</label>
-            <input type="text" id="phone" name="phone" required>
+            <input type="text" id="phone" name="phone" th:value="${user.get('phone')}" required>
             <div class="row no-gutters">
                 <div class="address col-12 col-md-6">
                     <h5>Billing address:</h5>
                     <table>
                         <tr>
                             <td><label for="country">Country:</label></td>
-                            <td><input type="text" id="country" name="country" required><br></td>
+                            <td><input type="text" id="country" name="country" th:value="${user.get('country')}" required><br></td>
                         </tr>
                         <tr>
                             <td><label for="zipcode">Zipcode:</label></td>
-                            <td><input type="text" id="zipcode" name="zipcode" required><br></td>
+                            <td><input type="text" id="zipcode" name="zipcode" th:value="${user.get('zipcode')}" required><br></td>
                         </tr>
                         <tr>
                             <td><label for="city">City:</label></td>
-                            <td><input type="text" id="city" name="city" required><br></td>
+                            <td><input type="text" id="city" name="city" th:value="${user.get('city')}" required><br></td>
                         </tr>
                         <tr>
                             <td><label for="street">Street:</label></td>
-                            <td><input type="text" id="street" name="street" required><br></td>
+                            <td><input type="text" id="street" name="street" th:value="${user.get('street')}" required><br></td>
                         </tr>
                         <tr>
                             <td><label for="number">Number:</label></td>
-                            <td><input type="text" id="number" name="doorNumber" required></td>
+                            <td><input type="text" id="number" name="number" th:value="${user.get('number')}" required></td>
                         </tr>
                     </table>
                 </div>
@@ -82,23 +83,23 @@
                     <table>
                         <tr>
                             <td><label for="s-country">Country:</label></td>
-                            <td><input type="text" id="s-country" name="sCountry"><br></td>
+                            <td><input type="text" id="s-country" name="sCountry" th:value="${user.get('country')}"><br></td>
                         </tr>
                         <tr>
                             <td><label for="s-zipcode">Zipcode:</label></td>
-                            <td><input type="text" id="s-zipcode" name="sZipcode"><br></td>
+                            <td><input type="text" id="s-zipcode" name="sZipcode" th:value="${user.get('zipcode')}"><br></td>
                         </tr>
                         <tr>
                             <td><label for="s-city">City:</label></td>
-                            <td><input type="text" id="s-city" name="sCity"><br></td>
+                            <td><input type="text" id="s-city" name="sCity" th:value="${user.get('city')}"><br></td>
                         </tr>
                         <tr>
                             <td><label for="s-street">Street:</label></td>
-                            <td><input type="text" id="s-street" name="sStreet"><br></td>
+                            <td><input type="text" id="s-street" name="sStreet" th:value="${user.get('street')}"><br></td>
                         </tr>
                         <tr>
                             <td><label for="s-number">Number:</label></td>
-                            <td><input type="text" id="s-number" name="sDoorNumber"></td>
+                            <td><input type="text" id="s-number" name="sNumber" th:value="${user.get('number')}"></td>
                         </tr>
                     </table>
                     <p>Please modify your shipping address if it is different from your billing address.</p>

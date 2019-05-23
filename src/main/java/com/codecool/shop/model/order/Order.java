@@ -27,6 +27,10 @@ public class Order {
         return user.getBillingAddress();
     }
 
+    public void setUser(User user) {
+        this.user = user;
+    }
+
     public Map<String, String> getShippingAddress() {
         return shippingAddress;
     }
