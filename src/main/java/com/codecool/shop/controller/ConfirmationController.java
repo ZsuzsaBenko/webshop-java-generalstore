@@ -47,9 +47,10 @@ public class ConfirmationController extends HttpServlet {
 
         if (currentStatus.getNext() == PaymentStatus.PAID) {
             ShoppingCart cart = order.getShoppingCart();
+            String name = order.getName();
             String to = order.getEmailAddress();
             String subject = "General Shop - Order confirmation";
-            String body = createEmailBody(cart);
+            String body = createEmailBody(cart, name);
 
             String host = "smtp.gmail.com";
             String from = System.getenv("GMUS");
@@ -96,7 +97,7 @@ public class ConfirmationController extends HttpServlet {
         return props;
     }
 
-    private String createEmailBody(ShoppingCart cart) {
+    private String createEmailBody(ShoppingCart cart, String name) {
         String generals = getGeneralsString(cart);
         String total = String.valueOf(cart.getTotalPrice());
 
@@ -107,7 +108,8 @@ public class ConfirmationController extends HttpServlet {
                 "    <title>Confirmation</title>\n" +
                 "</head>\n" +
                 "<body>\n" +
-                "<h1>Your order was successful.</h1>\n" +
+                "<h1>Dear " + name + ", </h1>" +
+                "<h2>Your order was successful.</h2>\n" +
                 "<p>We will deliver you the following generals:</p>\n" +
                 "    <div class=\"card-text\" id=\"cart-container\">\n" +
                 "        <table class=\"table\" id=\"cart-content-table\">\n" +

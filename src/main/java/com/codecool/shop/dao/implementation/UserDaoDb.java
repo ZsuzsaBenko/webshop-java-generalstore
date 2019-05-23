@@ -69,8 +69,7 @@ public class UserDaoDb implements UserDao {
     }
 
     @Override
-    public void updateUserData(String email) {
-        User user = find(email);
+    public void updateUserData(String email, User user) {
         String sql = "UPDATE users SET name=?, telephone=?, country=?, zipcode=?, city=?, street=? , number=?" +
                 "WHERE email=?";
         try (Connection connection = DriverManager.getConnection(DATABASE, DBUSER, DBPASSWORD)) {
@@ -82,11 +81,24 @@ public class UserDaoDb implements UserDao {
             statement.setString(5, user.getBillingAddress().get("city"));
             statement.setString(6, user.getBillingAddress().get("street"));
             statement.setString(7, user.getBillingAddress().get("number"));
+            statement.setString(8, email);
             statement.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
             throw new RuntimeException("Database not found", e);
         }
+    }
 
+    @Override
+    public void removeUser(String email) {
+        String sql = "DELETE FROM users WHERE email=?";
+        try (Connection connection = DriverManager.getConnection(DATABASE, DBUSER, DBPASSWORD)) {
+            PreparedStatement statement = connection.prepareStatement(sql);
+            statement.setString(1, email);
+            statement.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+            throw new RuntimeException("Database not found", e);
+        }
     }
 }

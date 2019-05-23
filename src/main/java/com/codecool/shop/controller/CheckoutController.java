@@ -1,6 +1,9 @@
 package com.codecool.shop.controller;
 
 import com.codecool.shop.config.TemplateEngineUtil;
+import com.codecool.shop.dao.UserDao;
+import com.codecool.shop.dao.implementation.UserDaoDb;
+import com.codecool.shop.model.User;
 import com.codecool.shop.model.order.Order;
 import com.codecool.shop.model.order.PaymentStatus;
 import org.thymeleaf.TemplateEngine;
@@ -17,6 +20,7 @@ import java.util.Map;
 
 @WebServlet(urlPatterns = {"/checkout"})
 public class CheckoutController extends HttpServlet {
+    private UserDao userDao = UserDaoDb.getInstance();
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -24,6 +28,10 @@ public class CheckoutController extends HttpServlet {
         TemplateEngine engine = TemplateEngineUtil.getTemplateEngine(request.getServletContext());
         WebContext context = new WebContext(request, response, request.getServletContext());
 
+        HttpSession session = request.getSession();
+        String email = (String) session.getAttribute("email");
+        User user = userDao.find(email);
+        // TODO
         ControllerUtil.setUserParameters(request, context);
         response.setCharacterEncoding("UTF-8");
         engine.process("order/checkout", context, response.getWriter());
@@ -31,6 +39,8 @@ public class CheckoutController extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+
+
         String name = request.getParameter("name");
         String email = request.getParameter("email");
         String phone = request.getParameter("phone");
@@ -50,9 +60,9 @@ public class CheckoutController extends HttpServlet {
         Order order = (Order) session.getAttribute("order");
 
         if (order != null) {
-            order.setName(name);
+            /*order.setName(name);
             order.setEmailAddress(email);
-            order.setPhoneNumber(phone);
+            order.setPhoneNumber(phone);*/
 
             Map<String, String> billingAddress = order.getBillingAddress();
             billingAddress.put("country", country);
