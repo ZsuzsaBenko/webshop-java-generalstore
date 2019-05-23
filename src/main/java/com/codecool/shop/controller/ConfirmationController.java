@@ -108,7 +108,7 @@ public class ConfirmationController extends HttpServlet {
                 "    <title>Confirmation</title>\n" +
                 "</head>\n" +
                 "<body>\n" +
-                "<h1>Dear " + name + ", </h1>" +
+                "<h2>Dear " + name + ", </h2>" +
                 "<h2>Your order was successful.</h2>\n" +
                 "<p>We will deliver you the following generals:</p>\n" +
                 "    <div class=\"card-text\" id=\"cart-container\">\n" +
