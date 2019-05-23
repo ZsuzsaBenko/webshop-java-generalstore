@@ -36,6 +36,7 @@ public class ConfirmationController extends HttpServlet {
         request.getSession().removeAttribute("order");
 
         ControllerUtil.setUserParameters(request, context);
+        response.setCharacterEncoding("UTF-8");
         engine.process("order/confirmation", context, response.getWriter());
     }
 

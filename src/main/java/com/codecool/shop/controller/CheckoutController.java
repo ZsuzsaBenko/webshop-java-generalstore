@@ -25,6 +25,7 @@ public class CheckoutController extends HttpServlet {
         WebContext context = new WebContext(request, response, request.getServletContext());
 
         ControllerUtil.setUserParameters(request, context);
+        response.setCharacterEncoding("UTF-8");
         engine.process("order/checkout", context, response.getWriter());
     }
 

@@ -25,6 +25,7 @@ public class PaymentController extends HttpServlet {
 
         ControllerUtil.setUserParameters(request, context);
         context.setVariable("paymentOptions", PAYMENT_OPTIONS);
+        response.setCharacterEncoding("UTF-8");
         engine.process("order/payment", context, response.getWriter());
     }
 }
