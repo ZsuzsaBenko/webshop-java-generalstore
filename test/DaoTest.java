@@ -1,21 +1,24 @@
 import com.codecool.shop.dao.ProductCategoryDao;
 import com.codecool.shop.dao.ProductDao;
 import com.codecool.shop.dao.SupplierDao;
+import com.codecool.shop.dao.UserDao;
 import com.codecool.shop.dao.implementation.*;
-
 import com.codecool.shop.model.Product;
+import com.codecool.shop.model.ProductCategory;
 import com.codecool.shop.model.Supplier;
+import com.codecool.shop.model.User;
+import org.junit.jupiter.api.*;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.MethodSource;
-import com.codecool.shop.model.ProductCategory;
-import org.junit.jupiter.api.*;
+
+import java.sql.SQLException;
 import java.util.stream.Stream;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
-class DaoTest {
+class reDaoTest {
 
     //These will be initialized before the tests run.
     private ProductCategory testCategory;
@@ -28,6 +31,8 @@ class DaoTest {
     private Supplier falseSupplier;
     private ProductCategory falseCategory;
 
+    private User testUser;
+    private User testUser2;
 
     //Create a streams that hold an instance of every class that implements ProductCategoryDao / SupplierDao and ProductDao.
     private static Stream<ProductCategoryDao> getCategoryClasses() {
@@ -48,6 +53,10 @@ class DaoTest {
                 ProductDaoDb.getInstance());
     }
 
+    private static Stream<UserDao> getUserClasses(){
+        return Stream.of(UserDaoDb.getInstance());
+    }
+
     /*
     Initialize a ProductCategory, a Supplier and a Product with these attributes:
     We also needed a category and a supplier that are not added to the db and memory.
@@ -58,6 +67,15 @@ class DaoTest {
         testCategory = new ProductCategory(400, "RomanCategory", "Lieutenant", "Let's go");
         testSupplier = new Supplier(500, "RomanSupplier", "Colonel");
         testProduct = new Product(100, "RomanMan", 1700, "TAL", "A man", testCategory, testSupplier);
+        testUser= new User();
+        testUser.setName("Yolo Yoco");
+        testUser.setEmail("Yolo@yolomail.com");
+        testUser.setPassword("Yolo");
+
+        testUser2 = new User();
+        testUser2.setEmail("1234@1234.com");
+        testUser2.setPassword("1234");
+        testUser2.setName("1234");
 
         falseCategory = new ProductCategory(401, "FalseCategory", "FalseLieutenant", "Let's go");
         falseSupplier = new Supplier(501, "FalseSupplier", "FalseColonel");
@@ -102,40 +120,56 @@ class DaoTest {
 
     @Order(4)
     @ParameterizedTest
+    @MethodSource("getUserClasses")
+    public void testUserAddAndFind(UserDao user) {
+        user.addNewUser(testUser);
+        User foundUser = user.find("Yolo@yolomail.com");
+        assertEquals(testUser.getPassword(),foundUser.getPassword());
+    }
+
+    @Order(5)
+    @ParameterizedTest
+    @MethodSource("getUserClasses")
+    public void testUserAddNotNull(UserDao user){
+        assertNotNull(user.find("Yolo@yolomail.com"));
+    }
+
+    @Order(6)
+    @ParameterizedTest
     @MethodSource("getCategoryClasses")
     public void testCategoryFind(ProductCategoryDao category){
         assertEquals("RomanCategory", category.find(400).getName());
     }
 
-    @Order(5)
+    @Order(7)
     @ParameterizedTest
     @MethodSource("getCategoryClasses")
     public void testCategoryFindByString(ProductCategoryDao category){
         assertEquals(400, category.find("RomanCategory").getId());
     }
 
-    @Order(6)
+    @Order(8)
     @ParameterizedTest
     @MethodSource("getSupplierClasses")
     public void testSupplierFind(SupplierDao supplier){
         assertEquals("RomanSupplier", supplier.find(500).getName());
     }
 
-    @Order(7)
+    @Order(9)
     @ParameterizedTest
     @MethodSource("getSupplierClasses")
     public void testSupplierFindByString(SupplierDao supplier){
         assertEquals(500, supplier.find("RomanSupplier").getId());
     }
 
-    @Order(8)
+    @Order(10)
     @ParameterizedTest
     @MethodSource("getProductClasses")
     public void testProductFindByID(ProductDao product){
         assertEquals("RomanMan", product.find(100).getName());
     }
 
-    @Order(9)
+    @Order(11)
     @ParameterizedTest
     @MethodSource("getProductClasses")
     public void testProductFindBySupplier(ProductDao product){
@@ -143,7 +177,7 @@ class DaoTest {
         assertEquals(0, product.getBy(falseSupplier).size());
     }
 
-    @Order(10)
+    @Order(12)
     @ParameterizedTest
     @MethodSource("getProductClasses")
     public void testProductFindByProductCategory(ProductDao product){
@@ -151,7 +185,15 @@ class DaoTest {
         assertEquals(0, product.getBy(falseCategory).size());
     }
 
-    @Order(11)
+    @Order(13)
+    @ParameterizedTest
+    @MethodSource("getUserClasses")
+    public void testUserNotFind(UserDao user){
+        User falseUser = user.find("Fake.Feri@fakemail.com");
+        assertThrows(NullPointerException.class,()->user.find(falseUser.getEmail()));
+    }
+
+    @Order(14)
     @ParameterizedTest
     @MethodSource("getProductClasses")
     public void testGetProductsByString(ProductDao product){
@@ -162,25 +204,34 @@ class DaoTest {
         assertThrows(NullPointerException.class, () -> product.getProducts("jhijn", testSupplier.getName()));
     }
 
-    @Order(12)
+    @Order(15)
     @ParameterizedTest
     @MethodSource("getCategoryClasses")
     public void testGetAllCategories(ProductCategoryDao category){
         assertEquals(2, category.getAll().size());
     }
 
-    @Order(13)
+    @Order(16)
     @ParameterizedTest
     @MethodSource("getSupplierClasses")
     public void testGetAllSuppliers(SupplierDao supplier){
         assertEquals(2, supplier.getAll().size());
     }
 
-    @Order(14)
+    @Order(17)
     @ParameterizedTest
     @MethodSource("getProductClasses")
     public void testProductGetAllProducts(ProductDao product){
         assertEquals(1, product.getAll().size());
+    }
+
+    @Order(18)
+    @ParameterizedTest
+    @MethodSource("getUserClasses")
+    public void testUserUpdate(UserDao user){
+        user.updateUserData(testUser.getEmail(),testUser2);
+        assertNotNull(user.find(testUser2.getEmail()));
+        assertEquals(user.find(testUser2.getEmail()).getName(), testUser2.getName());
     }
 
     /*
@@ -188,7 +239,7 @@ class DaoTest {
     We start with product as category and supplier are both connected to this.
     */
 
-    @Order(15)
+    @Order(19)
     @ParameterizedTest
     @MethodSource("getProductClasses")
     public void testProductRemove(ProductDao product){
@@ -197,7 +248,7 @@ class DaoTest {
         assertEquals(0, product.getAll().size());
     }
 
-    @Order(16)
+    @Order(20)
     @ParameterizedTest
     @MethodSource("getCategoryClasses")
     public void testCategoryRemove(ProductCategoryDao category){
@@ -208,7 +259,7 @@ class DaoTest {
     }
 
 
-    @Order(17)
+    @Order(21)
     @ParameterizedTest
     @MethodSource("getSupplierClasses")
     public void testSupplierRemove(SupplierDao supplier){
@@ -217,4 +268,24 @@ class DaoTest {
         assertNull(supplier.find(500));
         assertEquals(0, supplier.getAll().size());
     }
+
+    @Order(22)
+    @ParameterizedTest
+    @MethodSource("getUserClasses")
+    public void testUserRemove(UserDao user){
+        user.removeUser(testUser2.getEmail());
+        assertNull(user.find(testUser2.getEmail()));
+    }
+
+
+
+
+
+
+
+
+
+
+
+
 }
