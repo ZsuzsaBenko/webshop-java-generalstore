@@ -9,7 +9,12 @@ import com.codecool.shop.model.order.ShoppingCart;
 import org.thymeleaf.TemplateEngine;
 import org.thymeleaf.context.WebContext;
 
-import javax.mail.*;
+import javax.mail.Message;
+import javax.mail.MessagingException;
+import javax.mail.Session;
+import javax.mail.Transport;
+import javax.mail.internet.InternetAddress;
+import javax.mail.internet.MimeMessage;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -19,8 +24,6 @@ import java.io.IOException;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Properties;
-import javax.mail.internet.InternetAddress;
-import javax.mail.internet.MimeMessage;
 
 @WebServlet(urlPatterns = {"/confirm"})
 public class ConfirmationController extends HttpServlet {
@@ -32,11 +35,7 @@ public class ConfirmationController extends HttpServlet {
 
         request.getSession().removeAttribute("order");
 
-        String email = (String) request.getSession().getAttribute("email");
-        if (email != null) {
-            context.setVariable("status", "logged-in");
-        }
-
+        ControllerUtil.setUserParameters(request, context);
         engine.process("order/confirmation", context, response.getWriter());
     }
 

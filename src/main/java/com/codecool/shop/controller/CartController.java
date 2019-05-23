@@ -32,11 +32,9 @@ public class CartController extends HttpServlet {
         Map<Product, Integer> cartContent = getShoppingCartWithObjectKeys(cart);
 
         String url = (String) request.getSession().getAttribute("url");
-        String email = (String) request.getSession().getAttribute("email");
 
-        if (email != null) {
-            context.setVariable("status", "logged-in");
-        }
+        ControllerUtil.setUserParameters(request, context);
+
         context.setVariable("cartMap", cart != null ? cartContent : new LinkedHashMap<>());
         context.setVariable("cartValue", cart != null ? String.format("%s Talentum", cart.getTotalPrice()) : "");
         context.setVariable("previousURL", url == null ? "/" : url);

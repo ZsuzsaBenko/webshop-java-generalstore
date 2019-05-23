@@ -3,10 +3,12 @@ package com.codecool.shop.controller;
 import com.codecool.shop.dao.ProductCategoryDao;
 import com.codecool.shop.dao.ProductDao;
 import com.codecool.shop.dao.SupplierDao;
+import com.codecool.shop.dao.UserDao;
 import com.codecool.shop.dao.implementation.ProductCategoryDaoDb;
 import com.codecool.shop.dao.implementation.ProductDaoDb;
 import com.codecool.shop.config.TemplateEngineUtil;
 import com.codecool.shop.dao.implementation.SupplierDaoDb;
+import com.codecool.shop.dao.implementation.UserDaoDb;
 import com.codecool.shop.model.Product;
 import com.codecool.shop.model.ProductCategory;
 import com.codecool.shop.model.Supplier;
@@ -28,6 +30,7 @@ public class ProductController extends HttpServlet {
     private ProductCategoryDao productCategoryDataStore = ProductCategoryDaoDb.getInstance();
     private final ProductCategory defaultCategory = productCategoryDataStore.find(1);
     private SupplierDao supplierDao = SupplierDaoDb.getInstance();
+    private UserDao userDao = UserDaoDb.getInstance();
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
@@ -44,8 +47,11 @@ public class ProductController extends HttpServlet {
         List<Product> products = selectProducts(categoryName, supplierName, session);
         Map<String, Object> parameters = getServletParameters(categoryName, supplierName, products);
 
-        if (session.getAttribute("email") != null) {
+        String email = (String) session.getAttribute("email");
+        if (email != null) {
             parameters.put("status", "logged-in");
+            String name = userDao.find(email).getName();
+            parameters.put("name", name);
         }
 
         String addId = request.getParameter("item_id");
