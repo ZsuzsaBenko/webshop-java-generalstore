@@ -70,7 +70,7 @@ public class ConfirmationController extends HttpServlet {
                 message.addRecipient(Message.RecipientType.TO, toAddress);
 
                 message.setSubject(subject);
-                message.setContent(body, "text/html");
+                message.setContent(body, "text/html; charset=UTF-8");
 
                 Transport transport = session.getTransport("smtp");
                 transport.connect(host, from, pass);
