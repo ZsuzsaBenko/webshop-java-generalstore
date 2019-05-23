@@ -31,10 +31,12 @@
     <link href="https://fonts.googleapis.com/css?family=Chelsea+Market" rel="stylesheet">
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css"
           integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf" crossorigin="anonymous">
+    <script src="../../static/js/login.js" defer></script>
 </head>
 
 <body>
-    <div id="wrapper">
+    <!--/*@thymesVar id="invalidLogin" type="java.lang.String"*/-->
+    <div id="wrapper" th:attr="data-login=${invalidLogin}">
         <div th:replace="navbar.html :: nav"></div>
         <div class="jumbotron text-center">
             <h1>General Shop</h1>

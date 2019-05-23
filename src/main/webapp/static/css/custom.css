@@ -110,6 +110,15 @@ h1 {
     color: lavender;
 }
 
+#invalidLoginModal .modal-content {
+    background-color: lavender;
+}
+
+#invalidLoginModal .modal-title {
+    color: darkred;
+}
+
+
 /* registration / login modals */
 #register-modal .modal-content, #login-modal .modal-content {
     background-color: lavender;

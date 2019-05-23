@@ -47,12 +47,7 @@ public class ProductController extends HttpServlet {
         List<Product> products = selectProducts(categoryName, supplierName, session);
         Map<String, Object> parameters = getServletParameters(categoryName, supplierName, products);
 
-        String email = (String) session.getAttribute("email");
-        if (email != null) {
-            parameters.put("status", "logged-in");
-            String name = userDao.find(email).getName();
-            parameters.put("name", name);
-        }
+        handleLogin(session, parameters);
 
         String addId = request.getParameter("item_id");
 
@@ -69,6 +64,21 @@ public class ProductController extends HttpServlet {
             response.setCharacterEncoding("UTF-8");
             engine.process("product/index", context, response.getWriter());
         }
+    }
+
+    private void handleLogin(HttpSession session, Map<String, Object> parameters) {
+        String invalidLogin = (String) session.getAttribute("invalidLogin");
+        String email = (String) session.getAttribute("email");
+        if (email != null) {
+            parameters.put("status", "logged-in");
+            String name = userDao.find(email).getName();
+            parameters.put("name", name);
+            if (invalidLogin.equals("true")) {
+                session.removeAttribute(invalidLogin);
+                parameters.put("invalidLogin", "false");
+            }
+        }
+        parameters.put("invalidLogin", invalidLogin);
     }
 
     private void addToCart(String addId, HttpSession session) {

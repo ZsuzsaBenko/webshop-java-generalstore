@@ -22,18 +22,23 @@ public class LoginController extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
-        String email = request.getParameter("login-email");
-        String password = request.getParameter("login-password");
+        HttpSession session = request.getSession(true);
 
-        User user = userDao.find(email);
-        String hashedPassword = user.getPassword();
-        if (BCrypt.checkpw(password, hashedPassword)) {
-            HttpSession session = request.getSession(true);
-            session.setAttribute("email", email);
+        try {
+            String email = request.getParameter("login-email");
+            String password = request.getParameter("login-password");
+
+            User user = userDao.find(email);
+            String hashedPassword = user.getPassword();
+            if (BCrypt.checkpw(password, hashedPassword)) {
+                session.setAttribute("email", email);
+                session.setAttribute("invalidLogin", "false");
+            }
+            response.sendRedirect("/");
+        } catch (NullPointerException e) {
+            session.setAttribute("invalidLogin", "true");
+            response.sendRedirect("/");
         }
-
-
-        response.sendRedirect("/");
     }
 }
 
