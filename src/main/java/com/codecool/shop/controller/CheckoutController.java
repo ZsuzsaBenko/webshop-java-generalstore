@@ -47,27 +47,17 @@ public class CheckoutController extends HttpServlet {
         String name = request.getParameter("name");
         String email = (String) session.getAttribute("email");
         String phone = request.getParameter("phone");
-        String country = request.getParameter("country");
-        String zipcode = request.getParameter("zipcode");
-        String city = request.getParameter("city");
-        String street = request.getParameter("street");
-        String number = request.getParameter("number");
-        String sCountry = request.getParameter("sCountry");
-        String sZipcode = request.getParameter("sZipcode");
-        String sCity = request.getParameter("sCity");
-        String sStreet = request.getParameter("sStreet");
-        String sNumber = request.getParameter("sNumber");
 
         User user = userDao.find(email);
-
         user.setName(name);
         user.setPhoneNumber(phone);
+
         Map<String, String> newBillingAddress = new HashMap<>();
-        newBillingAddress.put("country", country);
-        newBillingAddress.put("zipcode", zipcode);
-        newBillingAddress.put("city", city);
-        newBillingAddress.put("street", street);
-        newBillingAddress.put("number", number);
+        newBillingAddress.put("country", request.getParameter("country"));
+        newBillingAddress.put("zipcode", request.getParameter("zipcode"));
+        newBillingAddress.put("city", request.getParameter("city"));
+        newBillingAddress.put("street", request.getParameter("street"));
+        newBillingAddress.put("number", request.getParameter("number"));
         user.setBillingAddress(newBillingAddress);
 
         userDao.updateUserData(email, user);
@@ -78,20 +68,17 @@ public class CheckoutController extends HttpServlet {
             order.setUser(user);
 
             Map<String, String> shippingAddress = order.getShippingAddress();
-            shippingAddress.put("country", sCountry);
-            shippingAddress.put("zipcode", sZipcode);
-            shippingAddress.put("city", sCity);
-            shippingAddress.put("street", sStreet);
-            shippingAddress.put("number", sNumber);
-
+            shippingAddress.put("country", request.getParameter("sCountry"));
+            shippingAddress.put("zipcode", request.getParameter("sZipcode"));
+            shippingAddress.put("city", request.getParameter("sCity"));
+            shippingAddress.put("street", request.getParameter("sStreet"));
+            shippingAddress.put("number", request.getParameter("sNumber"));
             order.setPaymentStatus(PaymentStatus.PROCESSED);
 
             response.sendRedirect("/payment");
         } else {
             response.sendRedirect("/cart");
         }
-
-
     }
 
     private Map<String, Object> getParameters(User user) {

@@ -30,7 +30,6 @@ public class RegistrationController  extends HttpServlet {
         user.setName(name);
         user.setEmail(email);
         user.setPassword(generatedSecuredPasswordHash);
-        System.out.println(user.getPassword());
 
         userDao.addNewUser(user);
 
