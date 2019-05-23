@@ -230,8 +230,7 @@ class reDaoTest {
     @MethodSource("getUserClasses")
     public void testUserUpdate(UserDao user){
         user.updateUserData(testUser.getEmail(),testUser2);
-        assertNotNull(user.find(testUser2.getEmail()));
-        assertEquals(user.find(testUser2.getEmail()).getName(), testUser2.getName());
+        assertEquals(user.find(testUser.getEmail()).getName(), testUser2.getName());
     }
 
     /*
@@ -273,8 +272,8 @@ class reDaoTest {
     @ParameterizedTest
     @MethodSource("getUserClasses")
     public void testUserRemove(UserDao user){
-        user.removeUser(testUser2.getEmail());
-        assertNull(user.find(testUser2.getEmail()));
+        user.removeUser(testUser.getEmail());
+        assertNull(user.find(testUser.getEmail()));
     }
 
 
