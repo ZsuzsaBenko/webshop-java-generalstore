@@ -3,10 +3,12 @@ package com.codecool.shop.controller;
 import com.codecool.shop.dao.ProductCategoryDao;
 import com.codecool.shop.dao.ProductDao;
 import com.codecool.shop.dao.SupplierDao;
+import com.codecool.shop.dao.UserDao;
 import com.codecool.shop.dao.implementation.ProductCategoryDaoDb;
 import com.codecool.shop.dao.implementation.ProductDaoDb;
 import com.codecool.shop.config.TemplateEngineUtil;
 import com.codecool.shop.dao.implementation.SupplierDaoDb;
+import com.codecool.shop.dao.implementation.UserDaoDb;
 import com.codecool.shop.model.Product;
 import com.codecool.shop.model.ProductCategory;
 import com.codecool.shop.model.Supplier;
@@ -28,6 +30,7 @@ public class ProductController extends HttpServlet {
     private ProductCategoryDao productCategoryDataStore = ProductCategoryDaoDb.getInstance();
     private final ProductCategory defaultCategory = productCategoryDataStore.find(1);
     private SupplierDao supplierDao = SupplierDaoDb.getInstance();
+    private UserDao userDao = UserDaoDb.getInstance();
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
@@ -44,6 +47,8 @@ public class ProductController extends HttpServlet {
         List<Product> products = selectProducts(categoryName, supplierName, session);
         Map<String, Object> parameters = getServletParameters(categoryName, supplierName, products);
 
+        handleLogin(session, parameters);
+
         String addId = request.getParameter("item_id");
 
         if (addId != null) {
@@ -59,6 +64,21 @@ public class ProductController extends HttpServlet {
             response.setCharacterEncoding("UTF-8");
             engine.process("product/index", context, response.getWriter());
         }
+    }
+
+    private void handleLogin(HttpSession session, Map<String, Object> parameters) {
+        String invalidLogin = (String) session.getAttribute("invalidLogin");
+        String email = (String) session.getAttribute("email");
+        if (email != null) {
+            parameters.put("status", "logged-in");
+            String name = userDao.find(email).getName();
+            parameters.put("name", name);
+            if (invalidLogin.equals("true")) {
+                session.removeAttribute(invalidLogin);
+                parameters.put("invalidLogin", "false");
+            }
+        }
+        parameters.put("invalidLogin", invalidLogin);
     }
 
     private void addToCart(String addId, HttpSession session) {
@@ -99,8 +119,8 @@ public class ProductController extends HttpServlet {
         return products;
     }
 
-    private HashMap<String, Object> getServletParameters(String categoryName, String supplierName, List<Product> products) {
-        HashMap<String, Object> parameters = new HashMap<>();
+    private Map<String, Object> getServletParameters(String categoryName, String supplierName, List<Product> products) {
+        Map<String, Object> parameters = new HashMap<>();
 
         ProductCategory category = productCategoryDataStore.find(categoryName);
         Supplier supplier = supplierDao.find(supplierName);

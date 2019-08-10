@@ -1,0 +1,53 @@
+package com.codecool.shop.model;
+
+import java.util.HashMap;
+import java.util.Map;
+
+public class User {
+    private String name;
+    private String email;
+    private String password;
+    private String phoneNumber;
+    private Map<String, String> billingAddress = new HashMap<>();
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+    public String getPhoneNumber() {
+        return phoneNumber;
+    }
+
+    public void setPhoneNumber(String phoneNumber) {
+        this.phoneNumber = phoneNumber;
+    }
+
+    public Map<String, String> getBillingAddress() {
+        return billingAddress;
+    }
+
+    public void setBillingAddress(Map<String, String> billingAddress) {
+        this.billingAddress = billingAddress;
+    }
+
+}

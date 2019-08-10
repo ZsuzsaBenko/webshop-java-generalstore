@@ -1,47 +1,34 @@
 package com.codecool.shop.model.order;
 
+import com.codecool.shop.model.User;
+
 import java.util.HashMap;
 import java.util.Map;
 
 public class Order {
-    private String name;
-    private String emailAddress;
-    private String phoneNumber;
-    private Map<String, String> billingAddress = new HashMap<>();
+    private User user;
     private Map<String, String> shippingAddress = new HashMap<>();
     private ShoppingCart shoppingCart = new ShoppingCart();
     private PaymentStatus paymentStatus = PaymentStatus.NEW;
 
     public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
+        return user.getName();
     }
 
     public String getEmailAddress() {
-        return emailAddress;
-    }
-
-    public void setEmailAddress(String emailAddress) {
-        this.emailAddress = emailAddress;
+        return user.getEmail();
     }
 
     public String getPhoneNumber() {
-        return phoneNumber;
-    }
-
-    public void setPhoneNumber(String phoneNumber) {
-        this.phoneNumber = phoneNumber;
+        return user.getPhoneNumber();
     }
 
     public Map<String, String> getBillingAddress() {
-        return billingAddress;
+        return user.getBillingAddress();
     }
 
-    public void setBillingAddress(Map<String, String> billingAddress) {
-        this.billingAddress = billingAddress;
+    public void setUser(User user) {
+        this.user = user;
     }
 
     public Map<String, String> getShippingAddress() {
@@ -63,4 +50,5 @@ public class Order {
     public void setPaymentStatus(PaymentStatus paymentStatus) {
         this.paymentStatus = paymentStatus;
     }
+
 }

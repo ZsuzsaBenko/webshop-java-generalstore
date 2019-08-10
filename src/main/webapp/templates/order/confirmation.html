@@ -31,15 +31,13 @@
 </head>
 <body>
     <div id="wrapper">
+        <div th:replace="navbar.html :: nav"></div>
         <div id="confirmation-message">
             <div>
                 <p>Payment is processed. Thank you for your order.</p>
             </div>
         </div>
         <div th:replace="footer.html :: foot"></div>
-        <div id="back-to-home">
-            <a class="btn custom-button" href="/">Home</a>
-        </div>
     </div>
 </body>
 </html>

@@ -1,0 +1,89 @@
+<!doctype html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<body>
+<nav>
+    <div th:fragment="nav" id="navbar">
+       <ul>
+           <!--/*@thymesVar id="status" type="java.lang.String"*/-->
+           <!--/*@thymesVar id="name" type="java.lang.String"*/-->
+           <li th:unless="${status == 'logged-in'}"><button type="button" id="register-button" data-toggle="modal" data-target="#register-modal">Register</button></li>
+           <li th:unless="${status == 'logged-in'}"><button type="button" id="login-button" data-toggle="modal" data-target="#login-modal">Login</button></li>
+           <li th:if="${status == 'logged-in'}"><a href="/logout">Logout</a></li>
+           <li th:if="${status == 'logged-in'}" th:text="'You are logged in as ' + ${name}"></li>
+           <li><a href="/">Home</a></li>
+       </ul>
+    </div>
+
+    <div class="modal fade" id="register-modal" tabindex="-1" role="dialog" aria-labelledby="register-title" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="register-title">Registration</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <form action="/register" method="post">
+                    <div class="modal-body">
+                            <label for="name">Name:</label>
+                            <input type="text" id="name" name="name" required>
+                            <label for="email">Email address:</label>
+                            <input type="email" id="email" name="email" required>
+                            <label for="password">Password:</label>
+                            <input type="password" id="password" name="password">
+                    </div>
+                    <div class="modal-footer">
+                        <!--<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>-->
+                        <button type="submit" class="btn custom-button">Register account</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="login-modal" tabindex="-1" role="dialog" aria-labelledby="login-title" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="login-title">Log in</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <form action="/login" method="post">
+                    <div class="modal-body">
+                        <label for="login-email">Email address:</label>
+                        <input type="email" id="login-email" name="login-email" required>
+                        <label for="login-password">Password:</label>
+                        <input type="password" id="login-password" name="login-password">
+                    </div>
+                    <div class="modal-footer">
+                        <!--<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>-->
+                        <button type="submit" class="btn custom-button">Log in</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="invalidLoginModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Unsuccessful login</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    This is an invalid email or password. Please try again!
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn custom-button" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</nav>
+</body>
+</html>
