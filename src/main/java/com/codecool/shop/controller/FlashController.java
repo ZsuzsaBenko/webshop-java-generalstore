@@ -18,7 +18,7 @@ public class FlashController extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         TemplateEngine engine = TemplateEngineUtil.getTemplateEngine(request.getServletContext());
         WebContext context = new WebContext(request, response, request.getServletContext());
-
+        response.setCharacterEncoding("UTF-8");
         engine.process("/product/flash", context, response.getWriter());
     }
 }

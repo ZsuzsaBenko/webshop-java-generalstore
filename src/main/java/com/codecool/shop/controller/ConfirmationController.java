@@ -9,7 +9,12 @@ import com.codecool.shop.model.order.ShoppingCart;
 import org.thymeleaf.TemplateEngine;
 import org.thymeleaf.context.WebContext;
 
-import javax.mail.*;
+import javax.mail.Message;
+import javax.mail.MessagingException;
+import javax.mail.Session;
+import javax.mail.Transport;
+import javax.mail.internet.InternetAddress;
+import javax.mail.internet.MimeMessage;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -19,8 +24,6 @@ import java.io.IOException;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Properties;
-import javax.mail.internet.InternetAddress;
-import javax.mail.internet.MimeMessage;
 
 @WebServlet(urlPatterns = {"/confirm"})
 public class ConfirmationController extends HttpServlet {
@@ -32,6 +35,8 @@ public class ConfirmationController extends HttpServlet {
 
         request.getSession().removeAttribute("order");
 
+        ControllerUtil.setNavbarParameters(request, context);
+        response.setCharacterEncoding("UTF-8");
         engine.process("order/confirmation", context, response.getWriter());
     }
 
@@ -42,9 +47,12 @@ public class ConfirmationController extends HttpServlet {
 
         if (currentStatus.getNext() == PaymentStatus.PAID) {
             ShoppingCart cart = order.getShoppingCart();
+            Map<String, String> billingAddress = order.getBillingAddress();
+            Map<String, String> shippingAddress = order.getShippingAddress();
+            String name = order.getName();
             String to = order.getEmailAddress();
             String subject = "General Shop - Order confirmation";
-            String body = createEmailBody(cart);
+            String body = createEmailBody(cart, name, billingAddress, shippingAddress);
 
             String host = "smtp.gmail.com";
             String from = System.getenv("GMUS");
@@ -62,7 +70,7 @@ public class ConfirmationController extends HttpServlet {
                 message.addRecipient(Message.RecipientType.TO, toAddress);
 
                 message.setSubject(subject);
-                message.setContent(body, "text/html");
+                message.setContent(body, "text/html; charset=UTF-8");
 
                 Transport transport = session.getTransport("smtp");
                 transport.connect(host, from, pass);
@@ -91,7 +99,8 @@ public class ConfirmationController extends HttpServlet {
         return props;
     }
 
-    private String createEmailBody(ShoppingCart cart) {
+    private String createEmailBody(ShoppingCart cart, String name, Map<String, String> billingAddress, Map<String, String> shippingAddress) {
+        String address = getAddressString(billingAddress, shippingAddress);
         String generals = getGeneralsString(cart);
         String total = String.valueOf(cart.getTotalPrice());
 
@@ -102,7 +111,21 @@ public class ConfirmationController extends HttpServlet {
                 "    <title>Confirmation</title>\n" +
                 "</head>\n" +
                 "<body>\n" +
-                "<h1>Your order was successful.</h1>\n" +
+                "<h2>Dear " + name + ", </h2>" +
+                "<h2>Your order was successful.</h2>\n" +
+                "<div class=\"card-text\">\n" +
+                "   <table class=\"table\" border=\"solid\" border-size=1 text-align=\"left\" padding=5 border-collapse=\"collapse\">\n" +
+                "       <thead text-align=\"left\">\n" +
+                "           <tr>\n" +
+                "               <th>Billing address:</th>\n" +
+                "               <th>Shipping address:</th>\n" +
+                "           </tr>\n" +
+                "       </thead>\n" +
+                "       <tbody>" + address +
+                "           <tr></tr>" +
+                "       </tbody>" +
+                "   </table>" +
+                "</div>" +
                 "<p>We will deliver you the following generals:</p>\n" +
                 "    <div class=\"card-text\" id=\"cart-container\">\n" +
                 "        <table class=\"table\" id=\"cart-content-table\">\n" +
@@ -141,6 +164,28 @@ public class ConfirmationController extends HttpServlet {
         }
 
         return generals.toString();
+    }
+
+    private String getAddressString(Map<String, String> bAddress, Map<String, String> sAddress) {
+        StringBuilder addressString = new StringBuilder();
+        addressString.append(
+                "<tr>\n" +
+                "   <td>" + bAddress.get("city") + "</td>\n" +
+                "   <td>" + sAddress.get("city") + "</td>\n" +
+                "</tr>\n" +
+                "<tr>\n" +
+                "   <td>" + bAddress.get("street") + " " + bAddress.get("number") + "</td>\n" +
+                "   <td>" + sAddress.get("street") + " " + sAddress.get("number") + "</td>\n" +
+                "</tr>\n" +
+                "<tr>\n" +
+                "   <td>" + bAddress.get("country") + "</td>\n" +
+                "   <td>" + sAddress.get("country") + "</td>\n" +
+                "</tr>\n" +
+                "<tr>\n" +
+                "   <td>" + bAddress.get("zipcode") + "</td>\n" +
+                "   <td>" + sAddress.get("zipcode") + "</td>\n" +
+                "</tr>\n");
+        return addressString.toString();
     }
 
     private Map<Product, Integer> getShoppingCartWithObjectKeys(ShoppingCart cart) {
