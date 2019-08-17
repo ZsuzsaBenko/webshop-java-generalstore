@@ -66,36 +66,23 @@
         </div>
     </div>
 
-    <div class="modal fade" id="invalidLoginModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal fade" id="warningModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
+                <!--/*@thymesVar id="invalidLogin" type="java.lang.String"*/-->
+                <!--/*@thymesVar id="emailAlreadyTaken" type="java.lang.String"*/-->
                 <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">Unsuccessful login</h5>
+                    <h5 th:if="${invalidLogin == 'true'}" class="modal-title">Unsuccessful login</h5>
+                    <h5 th:if="${emailAlreadyTaken == 'true'}" class="modal-title">Unsuccessful registration</h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
-                <div class="modal-body">
+                <div th:if="${invalidLogin == 'true'}" class="modal-body">
                     This is an invalid email or password. Please try again!
                 </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn custom-button" data-dismiss="modal">Close</button>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <div class="modal fade" id="emailAlreadyTakenModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-        <div class="modal-dialog" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title">Unsuccessful registration</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                <div class="modal-body">
-                    This email has already been taken. Please use another email address or log in!
+                <div th:if="${emailAlreadyTaken == 'true'}" class="modal-body">
+                    This email address has already been registered.
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn custom-button" data-dismiss="modal">Close</button>

@@ -110,11 +110,11 @@ h1 {
     color: lavender;
 }
 
-#invalidLoginModal .modal-content {
+#warningModal .modal-content {
     background-color: lavender;
 }
 
-#invalidLoginModal .modal-title {
+#warningModal .modal-title {
     color: darkred;
 }
 
