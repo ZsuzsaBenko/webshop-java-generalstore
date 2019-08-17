@@ -36,7 +36,8 @@
 
 <body>
     <!--/*@thymesVar id="invalidLogin" type="java.lang.String"*/-->
-    <div id="wrapper" th:attr="data-login=${invalidLogin}">
+    <!--/*@thymesVar id="emailAlreadyTaken" type="java.lang.String"*/-->
+    <div id="wrapper" th:attr="data-login=${invalidLogin}, data-registration=${emailAlreadyTaken}">
         <div th:replace="navbar.html :: nav"></div>
         <div class="jumbotron text-center">
             <h1>General Shop</h1>

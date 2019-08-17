@@ -47,6 +47,7 @@ public class ProductController extends HttpServlet {
         List<Product> products = selectProducts(categoryName, supplierName, session);
         Map<String, Object> parameters = getServletParameters(categoryName, supplierName, products);
 
+        handleRegistration(session, parameters);
         handleLogin(session, parameters);
 
         String addId = request.getParameter("item_id");
@@ -66,19 +67,29 @@ public class ProductController extends HttpServlet {
         }
     }
 
+    private void handleRegistration(HttpSession session, Map<String, Object> parameters) {
+        if (session.getAttribute("emailAlreadyTaken") != null) {
+            parameters.put("emailAlreadyTaken", "true");
+            session.removeAttribute("emailAlreadyTaken");
+        } else {
+            parameters.put("emailAlreadyTaken", "false");
+        }
+    }
+
     private void handleLogin(HttpSession session, Map<String, Object> parameters) {
         String invalidLogin = (String) session.getAttribute("invalidLogin");
         String email = (String) session.getAttribute("email");
-        if (email != null) {
-            parameters.put("status", "logged-in");
+
+        if (email != null && invalidLogin.equals("false")) {
             String name = userDao.find(email).getName();
             parameters.put("name", name);
-            if (invalidLogin.equals("true")) {
-                session.removeAttribute(invalidLogin);
-                parameters.put("invalidLogin", "false");
-            }
+            parameters.put("status", "logged-in");
+            session.removeAttribute(invalidLogin);
+        } else if (parameters.get("emailAlreadyTaken").equals("true")) {
+            parameters.put("invalidLogin", null);
+        } else {
+            parameters.put("invalidLogin", invalidLogin);
         }
-        parameters.put("invalidLogin", invalidLogin);
     }
 
     private void addToCart(String addId, HttpSession session) {

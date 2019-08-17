@@ -9,3 +9,16 @@ function sendInvalidLoginMessage() {
 }
 
 sendInvalidLoginMessage();
+
+
+function sendEmailAlreadyTakenMessage() {
+    const wrapper = document.querySelector("#wrapper");
+    window.addEventListener("load", function (event) {
+        let emailAlreadyTaken = wrapper.dataset.registration;
+        if (emailAlreadyTaken === "true") {
+            $('#emailAlreadyTakenModal').modal('show')
+        }
+    });
+}
+
+sendEmailAlreadyTakenMessage();
