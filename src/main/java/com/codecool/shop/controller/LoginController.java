@@ -33,6 +33,8 @@ public class LoginController extends HttpServlet {
             if (BCrypt.checkpw(password, hashedPassword)) {
                 session.setAttribute("email", email);
                 session.setAttribute("invalidLogin", "false");
+            } else {
+                session.setAttribute("invalidLogin", "true");
             }
             response.sendRedirect("/");
         } catch (NullPointerException e) {
