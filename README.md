@@ -1,4 +1,4 @@
-# General Shop
+# General Store
 
 General Store is an ancient history themed webshop. After registration and successful login, the user can purchase his/her own ancient warlord through the website.
 
