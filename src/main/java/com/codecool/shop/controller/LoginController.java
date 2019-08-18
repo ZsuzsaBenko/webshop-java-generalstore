@@ -24,20 +24,23 @@ public class LoginController extends HttpServlet {
 
         HttpSession session = request.getSession(true);
 
-        try {
-            String email = request.getParameter("login-email");
-            String password = request.getParameter("login-password");
+        String email = request.getParameter("login-email");
+        String password = request.getParameter("login-password");
 
+        try {
             User user = userDao.find(email);
             String hashedPassword = user.getPassword();
             if (BCrypt.checkpw(password, hashedPassword)) {
                 session.setAttribute("email", email);
                 session.setAttribute("invalidLogin", "false");
+            } else {
+                session.setAttribute("invalidLogin", "true");
             }
-            response.sendRedirect("/");
         } catch (NullPointerException e) {
             session.setAttribute("invalidLogin", "true");
+        } finally {
             response.sendRedirect("/");
+
         }
     }
 }

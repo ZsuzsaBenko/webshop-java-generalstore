@@ -51,7 +51,7 @@ public class ConfirmationController extends HttpServlet {
             Map<String, String> shippingAddress = order.getShippingAddress();
             String name = order.getName();
             String to = order.getEmailAddress();
-            String subject = "General Shop - Order confirmation";
+            String subject = "General Store - Order confirmation";
             String body = createEmailBody(cart, name, billingAddress, shippingAddress);
 
             String host = "smtp.gmail.com";

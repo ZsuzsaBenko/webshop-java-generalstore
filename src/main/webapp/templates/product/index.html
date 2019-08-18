@@ -31,15 +31,16 @@
     <link href="https://fonts.googleapis.com/css?family=Chelsea+Market" rel="stylesheet">
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css"
           integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf" crossorigin="anonymous">
-    <script src="../../static/js/login.js" defer></script>
+    <script src="../../static/js/modals.js" defer></script>
 </head>
 
 <body>
     <!--/*@thymesVar id="invalidLogin" type="java.lang.String"*/-->
-    <div id="wrapper" th:attr="data-login=${invalidLogin}">
+    <!--/*@thymesVar id="emailAlreadyTaken" type="java.lang.String"*/-->
+    <div id="wrapper" th:attr="data-login=${invalidLogin}, data-registration=${emailAlreadyTaken}">
         <div th:replace="navbar.html :: nav"></div>
         <div class="jumbotron text-center">
-            <h1>General Shop</h1>
+            <h1>General Store</h1>
         </div>
         <div class="">
             <div th:replace="product/search.html :: search"></div>
