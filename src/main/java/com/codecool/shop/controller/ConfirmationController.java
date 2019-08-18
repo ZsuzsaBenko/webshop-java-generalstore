@@ -89,6 +89,7 @@ public class ConfirmationController extends HttpServlet {
     private Properties getProperties(String host, String from, String pass) {
         Properties props = System.getProperties();
 
+        props.put("mail.smtp.ssl.trust", "smtp.gmail.com");
         props.put("mail.smtp.starttls.enable", "true");
         props.put("mail.smtp.host", host);
         props.put("mail.smtp.user", from);
