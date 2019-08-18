@@ -1,27 +1,11 @@
-# General Store
+## General Store
 
-General Store is an ancient history themed webshop. After registration and successful login, the user can purchase his/her own ancient warlord through the website.
+### Java SE webshop project
 
-# Install
+The assignemnt was to build an online e-commerce web-application with Java, where users can browse products, add them to a shopping cart, checkout items and make payments. We decided on a historical theme for the shop: we sell the most famous commanders and generals of ancient times.
 
-Import this project to IntelliJ as a Maven project.
-IntelliJ can auto-install the dependencies based on the pom.xml
+### Technologies: 
+Java SE, PostgreSQL with JDBC, JUnit5, Thymeleaf, HTML5, CSS3, JavaScript
 
-# Live Version
-
+### Link to Heroku-app:
 http://generalstorecc.herokuapp.com/
-
-# Technologies
-
-Backend
-- Java 11 SE
-- Jetty
-- PostgreSQL
-- JDBC
-- Junit5
-- IntelliJ
-
-Frontend
-- HTML5
-- CSS3
-- Thymeleaf
